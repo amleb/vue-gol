@@ -1,0 +1,26 @@
+$borderColour: #dcdcdc;
+
+#board-container {
+  padding: 50px;
+
+  #board {
+    .columns {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      border-top: 1px solid $borderColour;
+      border-left: 1px solid $borderColour;
+
+      .column {
+        padding: 0;
+
+        .cell {
+          flex: 1;
+          border-right: 1px solid $borderColour;
+          border-bottom: 1px solid $borderColour;
+          padding-top: 100%;
+        }
+      }
+    }
+  }
+}
