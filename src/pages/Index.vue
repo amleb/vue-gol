@@ -6,7 +6,8 @@
     <button v-on:click="play()" :disabled="playDisabled">Start</button>
     <button v-on:click="step()" :disabled="stepDisabled">Step</button>
     <button v-on:click="stop()" :disabled="stopDisabled">Stop</button>
-    <button v-on:click="reset()" :disabled="resetDisabled">Reset</button>
+    <button v-on:click="reset(false)" :disabled="resetDisabled">Reset</button>
+    <button v-on:click="reset(true)" :disabled="randomDisabled">Random</button>
   </div>
 </template>
 
@@ -21,7 +22,8 @@ export default {
       playDisabled: true,
       stepDisabled: true,
       stopDisabled: true,
-      resetDisabled: true
+      resetDisabled: true,
+      randomDisabled: true
     }
   },
   computed: mapState({
@@ -38,6 +40,7 @@ export default {
       this.playDisabled = true
       this.stepDisabled = false
       this.stopDisabled = false
+      this.randomDisabled = true
     },
 
     step () {
@@ -46,6 +49,7 @@ export default {
       this.playDisabled = false
       this.stopDisabled = true
       this.resetDisabled = false
+      this.randomDisabled = false
     },
 
     stop () {
@@ -55,10 +59,11 @@ export default {
       this.resetDisabled = false
     },
 
-    reset () {
-      this.$store.commit('board/createCells', {columnsNumber: 150, rowsNumber: 50})
+    reset (randomize) {
+      this.$store.commit('board/createCells', {columnsNumber: 150, rowsNumber: 50, randomize})
       this.playDisabled = false
       this.stepDisabled = false
+      this.randomDisabled = false
     },
 
     undo () {

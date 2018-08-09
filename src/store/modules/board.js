@@ -4,7 +4,7 @@ const state = {
   ticks: 0,
   cells: [],
   history: [],
-  lastCells: []
+  prevGen: []
 }
 
 const getters = {}
@@ -20,52 +20,52 @@ const mutations = {
       cells[i] = []
 
       for (let j = 0; j < payload.rowsNumber; j++) {
-        cells[i][j] = {isAlive: false}
+        cells[i][j] = {isAlive: payload.randomize ? !!Math.round(Math.random()) : false}
       }
     }
 
     state.cells = cells
-    state.lastCells = []
+    state.prevGen = []
     state.ticks = 0
   },
 
   tick (state) {
-    const previousCells = state.cells
-    const columnsNumber = previousCells.length
-    const rowsNumber = previousCells[0].length
+    const currentGen = state.cells
+    const columnsNumber = currentGen.length
+    const rowsNumber = currentGen[0].length
 
     if (state.history.length > HISTORY_LENGTH) {
       state.history.shift()
     }
-    state.history.push(state.lastCells)
+    state.history.push(state.prevGen)
 
-    let changedCells = []
+    let nextGenChanges = []
 
     for (let x = 0; x < columnsNumber; x++) {
-      changedCells[x] = []
-      let leftColumnExists = typeof previousCells[x - 1] !== 'undefined'
-      let rightColumnExists = typeof previousCells[x + 1] !== 'undefined'
+      nextGenChanges[x] = []
+      let leftColumnExists = typeof currentGen[x - 1] !== 'undefined'
+      let rightColumnExists = typeof currentGen[x + 1] !== 'undefined'
 
       for (let y = 0; y < rowsNumber; y++) {
-        const wasAlive = previousCells[x][y].isAlive
+        const wasAlive = currentGen[x][y].isAlive
         let isAlive = false
         let aliveSiblings = 0
-        let topRowExists = typeof previousCells[x][y - 1] !== 'undefined'
-        let bottomRowExists = typeof previousCells[x][y + 1] !== 'undefined'
+        let topRowExists = typeof currentGen[x][y - 1] !== 'undefined'
+        let bottomRowExists = typeof currentGen[x][y + 1] !== 'undefined'
 
-        aliveSiblings += topRowExists && previousCells[x][y - 1].isAlive ? 1 : 0
-        aliveSiblings += bottomRowExists && previousCells[x][y + 1].isAlive ? 1 : 0
+        aliveSiblings += topRowExists && currentGen[x][y - 1].isAlive ? 1 : 0
+        aliveSiblings += bottomRowExists && currentGen[x][y + 1].isAlive ? 1 : 0
 
         if (leftColumnExists) {
-          aliveSiblings += topRowExists && previousCells[x - 1][y - 1].isAlive ? 1 : 0
-          aliveSiblings += previousCells[x - 1][y].isAlive ? 1 : 0
-          aliveSiblings += bottomRowExists && previousCells[x - 1][y + 1].isAlive ? 1 : 0
+          aliveSiblings += topRowExists && currentGen[x - 1][y - 1].isAlive ? 1 : 0
+          aliveSiblings += currentGen[x - 1][y].isAlive ? 1 : 0
+          aliveSiblings += bottomRowExists && currentGen[x - 1][y + 1].isAlive ? 1 : 0
         }
 
         if (rightColumnExists) {
-          aliveSiblings += topRowExists && previousCells[x + 1][y - 1].isAlive ? 1 : 0
-          aliveSiblings += previousCells[x + 1][y].isAlive ? 1 : 0
-          aliveSiblings += bottomRowExists && previousCells[x + 1][y + 1].isAlive ? 1 : 0
+          aliveSiblings += topRowExists && currentGen[x + 1][y - 1].isAlive ? 1 : 0
+          aliveSiblings += currentGen[x + 1][y].isAlive ? 1 : 0
+          aliveSiblings += bottomRowExists && currentGen[x + 1][y + 1].isAlive ? 1 : 0
         }
 
         if (aliveSiblings < 2) {
@@ -79,17 +79,17 @@ const mutations = {
         }
 
         if (isAlive !== wasAlive) {
-          changedCells[x][y] = isAlive
+          nextGenChanges[x][y] = isAlive
         }
       }
     }
 
-    state.lastCells = changedCells
+    state.prevGen = nextGenChanges
 
-    let cells = previousCells.slice(0)
+    let cells = currentGen.slice(0)
     for (let x = 0; x < columnsNumber; x++) {
-      for (let y in changedCells[x]) {
-        cells[x][y] = {isAlive: changedCells[x][y]}
+      for (let y in nextGenChanges[x]) {
+        cells[x][y] = {isAlive: nextGenChanges[x][y]}
       }
     }
 
