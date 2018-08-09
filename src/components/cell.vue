@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   props: ['properties', 'x', 'y'],
@@ -18,7 +18,7 @@ export default {
   // updated () {
   //   console.log(this.x + ', ' + this.y)
   // },
-  methods: mapActions('board', [
+  methods: mapMutations('board', [
     'toggleCell'
   ])
 }

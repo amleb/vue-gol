@@ -2,6 +2,7 @@
   <div id="board-container">
     <board-component></board-component>
     <br/>
+    <button v-on:click="undo()" :disabled="backDisabled">Back</button>
     <button v-on:click="play()" :disabled="playDisabled">Start</button>
     <button v-on:click="step()" :disabled="stepDisabled">Step</button>
     <button v-on:click="stop()" :disabled="stopDisabled">Stop</button>
@@ -11,6 +12,7 @@
 
 <script>
 import BoardComponent from '../components/board'
+import { mapState } from 'vuex'
 
 export default {
   components: {BoardComponent},
@@ -22,6 +24,11 @@ export default {
       resetDisabled: true
     }
   },
+  computed: mapState({
+    backDisabled (state) {
+      return state.board.history.length === 0
+    }
+  }),
   created () {
     this.reset()
   },
@@ -49,9 +56,13 @@ export default {
     },
 
     reset () {
-      this.$store.dispatch('board/createCells', {columnsNumber: 150, rowsNumber: 50})
+      this.$store.commit('board/createCells', {columnsNumber: 150, rowsNumber: 50})
       this.playDisabled = false
       this.stepDisabled = false
+    },
+
+    undo () {
+      this.$store.commit('board/undo')
     }
   }
 }
