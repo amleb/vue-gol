@@ -1,21 +1,32 @@
 <template>
-    <div id="board">
-        <div class="columns">
-            <div v-for="c in numberOfColumns" class="column" v-bind:key="c">
-                <div v-for="r in numberOfRows" class="cell" v-bind:key="r"></div>
+    <div>
+        <p>
+            <span>Ticks: {{ ticks }}</span>
+        </p>
+        <div id="board">
+            <div class="columns">
+                <div v-for="(c, x) in cells" class="column" v-bind:key="x">
+                    <cell-component v-for="(properties, y) in c"
+                                    :properties="properties"
+                                    :x="x"
+                                    :y="y"
+                                    v-bind:key="x+'-'+y"></cell-component>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import CellComponent from './cell'
+
 export default {
-  id: 'gateway',
-  data () {
-    return {
-      numberOfColumns: 150,
-      numberOfRows: 50
-    }
-  }
+  id: 'board',
+  components: {CellComponent},
+  computed: mapState({
+    cells: state => state.board.cells,
+    ticks: state => state.board.ticks
+  })
 }
 </script>

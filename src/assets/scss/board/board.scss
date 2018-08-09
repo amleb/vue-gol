@@ -1,4 +1,5 @@
 $borderColour: #dcdcdc;
+$aliveCellColor: rebeccapurple;
 
 #board-container {
   padding: 50px;
@@ -19,6 +20,10 @@ $borderColour: #dcdcdc;
           border-right: 1px solid $borderColour;
           border-bottom: 1px solid $borderColour;
           padding-top: 100%;
+
+          &.alive {
+            background-color: $aliveCellColor;
+          }
         }
       }
     }

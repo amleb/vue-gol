@@ -1,6 +1,11 @@
 <template>
   <div id="board-container">
     <board-component></board-component>
+    <br/>
+    <button v-on:click="play()" :disabled="playDisabled">Start</button>
+    <button v-on:click="step()" :disabled="stepDisabled">Step</button>
+    <button v-on:click="stop()" :disabled="stopDisabled">Stop</button>
+    <button v-on:click="reset()" :disabled="resetDisabled">Reset</button>
   </div>
 </template>
 
@@ -8,11 +13,45 @@
 import BoardComponent from '../components/board'
 
 export default {
-  name: 'Index',
   components: {BoardComponent},
   data () {
     return {
+      playDisabled: true,
+      stepDisabled: true,
+      stopDisabled: true,
+      resetDisabled: true
+    }
+  },
+  created () {
+    this.reset()
+  },
+  methods: {
+    play () {
+      this.interval = setInterval(() => this.$store.commit('board/tick'), 200)
+      this.playDisabled = true
+      this.stepDisabled = false
+      this.stopDisabled = false
+    },
 
+    step () {
+      clearInterval(this.interval)
+      this.$store.commit('board/tick')
+      this.playDisabled = false
+      this.stopDisabled = true
+      this.resetDisabled = false
+    },
+
+    stop () {
+      clearInterval(this.interval)
+      this.playDisabled = false
+      this.stopDisabled = true
+      this.resetDisabled = false
+    },
+
+    reset () {
+      this.$store.dispatch('board/createCells', {columnsNumber: 150, rowsNumber: 50})
+      this.playDisabled = false
+      this.stepDisabled = false
     }
   }
 }
