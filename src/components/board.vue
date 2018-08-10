@@ -1,11 +1,8 @@
 <template>
     <div>
-        <p>
-            <span>Ticks: {{ ticks }}</span>
-        </p>
         <div id="board">
             <div class="columns">
-                <div v-for="(c, x) in cells" class="column" v-bind:key="x">
+                <div v-for="(c, x) in generation" class="column" v-bind:key="x">
                     <cell-component v-for="(properties, y) in c"
                                     :properties="properties"
                                     :x="x"
@@ -25,8 +22,7 @@ export default {
   id: 'board',
   components: {CellComponent},
   computed: mapState({
-    cells: state => state.board.cells,
-    ticks: state => state.board.ticks
+    generation: state => state.board.generation
   })
 }
 </script>

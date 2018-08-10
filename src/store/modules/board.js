@@ -2,7 +2,7 @@ const HISTORY_LENGTH = 5
 
 const state = {
   ticks: 0,
-  cells: [],
+  generation: [],
   history: [],
   prevGen: []
 }
@@ -24,13 +24,13 @@ const mutations = {
       }
     }
 
-    state.cells = cells
+    state.generation = cells
     state.prevGen = []
     state.ticks = 0
   },
 
   tick (state) {
-    const currentGen = state.cells
+    const currentGen = state.generation
     const columnsNumber = currentGen.length
     const rowsNumber = currentGen[0].length
 
@@ -94,17 +94,17 @@ const mutations = {
     }
 
     state.ticks += 1
-    state.cells = cells
+    state.generation = cells
   },
 
   toggleCell (state, payload) {
-    let cells = state.cells.slice(0)
-    state.cells[payload.x][payload.y] = {isAlive: !state.cells[payload.x][payload.y].isAlive}
-    state.cells = cells
+    let cells = state.generation.slice(0)
+    state.generation[payload.x][payload.y] = {isAlive: !state.generation[payload.x][payload.y].isAlive}
+    state.generation = cells
   },
 
   undo (state) {
-    const currentCells = state.cells
+    const currentCells = state.generation
     const columnsNumber = currentCells.length
     const changedCells = state.history.pop()
     let cells = currentCells.slice(0)
@@ -116,7 +116,7 @@ const mutations = {
     }
 
     state.ticks -= 1
-    state.cells = cells
+    state.generation = cells
   }
 }
 
