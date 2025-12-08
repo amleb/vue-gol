@@ -1,6 +1,31 @@
 const HISTORY_LENGTH = 5
 
-const state = {
+interface Cell {
+  isAlive: boolean
+}
+
+type Generation = Cell[][]
+type GenerationChanges = Array<Array<boolean | undefined>>
+
+interface BoardState {
+  ticks: number,
+  generation: Generation,
+  history: GenerationChanges[],
+  prevGen: GenerationChanges
+}
+
+interface CreateCellsPayload {
+  columnsNumber: number,
+  rowsNumber: number,
+  randomize: boolean
+}
+
+interface ToggleCellPayload {
+  x: number,
+  y: number
+}
+
+const state: BoardState = {
   ticks: 0,
   generation: [],
   history: [],
@@ -13,8 +38,8 @@ const actions = {}
 
 const mutations = {
 
-  createCells (state, payload) {
-    let cells = []
+  createCells (state: BoardState, payload: CreateCellsPayload) {
+    let cells: Generation = []
 
     for (let i = 0; i < payload.columnsNumber; i++) {
       cells[i] = []
@@ -29,7 +54,7 @@ const mutations = {
     state.ticks = 0
   },
 
-  tick (state) {
+  tick (state: BoardState) {
     const currentGen = state.generation
     const columnsNumber = currentGen.length
     const rowsNumber = currentGen[0].length
@@ -39,7 +64,7 @@ const mutations = {
     }
     state.history.push(state.prevGen)
 
-    let nextGenChanges = []
+    let nextGenChanges: GenerationChanges = []
 
     for (let x = 0; x < columnsNumber; x++) {
       nextGenChanges[x] = []
@@ -89,7 +114,7 @@ const mutations = {
     let cells = currentGen.slice(0)
     for (let x = 0; x < columnsNumber; x++) {
       for (let y in nextGenChanges[x]) {
-        cells[x][y] = {isAlive: nextGenChanges[x][y]}
+        cells[x][Number(y)] = {isAlive: !!nextGenChanges[x][Number(y)]}
       }
     }
 
@@ -97,21 +122,25 @@ const mutations = {
     state.generation = cells
   },
 
-  toggleCell (state, payload) {
+  toggleCell (state: BoardState, payload: ToggleCellPayload) {
     let cells = state.generation.slice(0)
     state.generation[payload.x][payload.y] = {isAlive: !state.generation[payload.x][payload.y].isAlive}
     state.generation = cells
   },
 
-  undo (state) {
+  undo (state: BoardState) {
     const currentCells = state.generation
     const columnsNumber = currentCells.length
     const changedCells = state.history.pop()
     let cells = currentCells.slice(0)
 
+    if (!changedCells) {
+      return
+    }
+
     for (let x = 0; x < columnsNumber; x++) {
       for (let y in changedCells[x]) {
-        cells[x][y] = {isAlive: changedCells[x][y]}
+        cells[x][Number(y)] = {isAlive: !!changedCells[x][Number(y)]}
       }
     }
 
