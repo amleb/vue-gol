@@ -5,18 +5,35 @@
         @click="toggleCell({x: x, y: y})"/>
 </template>
 
-<script>
-import { mapState, mapMutations } from 'vuex'
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+import { Cell, ToggleCellPayload } from '@/store/modules/board'
+import { RootState } from '@/types'
 
-export default {
-  props: ['properties', 'x', 'y'],
-  computed: mapState({
-    isAlive (state) {
-      return state.board.generation[this.x][this.y]
+export default Vue.extend({
+  props: {
+    properties: {
+      type: Object as PropType<Cell>,
+      required: true
+    },
+    x: {
+      type: Number,
+      required: true
+    },
+    y: {
+      type: Number,
+      required: true
     }
-  }),
-  methods: mapMutations('board', [
-    'toggleCell'
-  ])
-}
+  },
+  computed: {
+    isAlive (): Cell {
+      return (this.$store.state as RootState).board.generation[this.x][this.y]
+    }
+  },
+  methods: {
+    toggleCell (payload: ToggleCellPayload): void {
+      this.$store.commit('board/toggleCell', payload)
+    }
+  }
+})
 </script>

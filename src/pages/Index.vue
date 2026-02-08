@@ -6,15 +6,16 @@
   </div>
 </template>
 
-<script>
-import BoardComponent from '../components/board'
-import ButtonsComponent from '../components/buttons'
-import StatsComponent from '../components/stats'
+<script lang="ts">
+import Vue from 'vue'
+import BoardComponent from '../components/board.vue'
+import ButtonsComponent, { ButtonsComponent as ButtonsComponentInstance } from '../components/buttons.vue'
+import StatsComponent from '../components/stats.vue'
 
-export default {
+export default Vue.extend({
   components: {BoardComponent, ButtonsComponent, StatsComponent},
-  mounted () {
-    this.$refs.buttons.reset()
+  mounted (): void {
+    (this.$refs.buttons as ButtonsComponentInstance).reset()
   }
-}
+})
 </script>

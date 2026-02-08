@@ -1,26 +1,26 @@
 const HISTORY_LENGTH = 5
 
-interface Cell {
+export interface Cell {
   isAlive: boolean
 }
 
-type Generation = Cell[][]
-type GenerationChanges = Array<Array<boolean | undefined>>
+export type Generation = Cell[][]
+export type GenerationChanges = Array<Array<boolean | undefined>>
 
-interface BoardState {
+export interface BoardState {
   ticks: number,
   generation: Generation,
   history: GenerationChanges[],
   prevGen: GenerationChanges
 }
 
-interface CreateCellsPayload {
+export interface CreateCellsPayload {
   columnsNumber: number,
   rowsNumber: number,
   randomize: boolean
 }
 
-interface ToggleCellPayload {
+export interface ToggleCellPayload {
   x: number,
   y: number
 }

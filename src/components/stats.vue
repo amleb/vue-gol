@@ -6,13 +6,16 @@
     </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
+<script lang="ts">
+import Vue from 'vue'
+import { RootState } from '@/types'
 
-export default {
+export default Vue.extend({
   id: 'stats',
-  computed: mapState({
-    ticks: state => state.board.ticks
-  })
-}
+  computed: {
+    ticks (): number {
+      return (this.$store.state as RootState).board.ticks
+    }
+  }
+})
 </script>

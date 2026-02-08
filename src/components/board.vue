@@ -14,15 +14,19 @@
     </div>
 </template>
 
-<script>
-import {mapState} from 'vuex'
-import CellComponent from './cell'
+<script lang="ts">
+import Vue from 'vue'
+import CellComponent from './cell.vue'
+import { Generation } from '@/store/modules/board'
+import { RootState } from '@/types'
 
-export default {
+export default Vue.extend({
   id: 'board',
   components: {CellComponent},
-  computed: mapState({
-    generation: state => state.board.generation
-  })
-}
+  computed: {
+    generation (): Generation {
+      return (this.$store.state as RootState).board.generation
+    }
+  }
+})
 </script>
