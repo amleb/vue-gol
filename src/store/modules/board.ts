@@ -1,3 +1,6 @@
+import { type ParsedLifeRules } from '@/types'
+import { parseRule, alg, defaultRule } from '@/life-like-rules'
+
 const HISTORY_LENGTH = 5
 
 export interface Cell {
@@ -11,7 +14,8 @@ export interface BoardState {
   ticks: number,
   generation: Generation,
   history: GenerationChanges[],
-  prevGen: GenerationChanges
+  prevGen: GenerationChanges,
+  lifeRules: ParsedLifeRules,
 }
 
 export interface CreateCellsPayload {
@@ -29,7 +33,8 @@ const state: BoardState = {
   ticks: 0,
   generation: [],
   history: [],
-  prevGen: []
+  prevGen: [],
+  lifeRules: parseRule(defaultRule)
 }
 
 const getters = {}
@@ -37,6 +42,9 @@ const getters = {}
 const actions = {}
 
 const mutations = {
+  setLifeRules (state: BoardState, payload: string) {
+    state.lifeRules = parseRule(payload)
+  },
 
   createCells (state: BoardState, payload: CreateCellsPayload) {
     let cells: Generation = []
@@ -93,15 +101,7 @@ const mutations = {
           aliveSiblings += bottomRowExists && currentGen[x + 1][y + 1].isAlive ? 1 : 0
         }
 
-        if (aliveSiblings < 2) {
-          isAlive = false
-        } else if (aliveSiblings > 3) {
-          isAlive = false
-        } else if (wasAlive && (aliveSiblings === 2 || aliveSiblings === 3)) {
-          isAlive = true
-        } else if (!wasAlive && aliveSiblings === 3) {
-          isAlive = true
-        }
+        isAlive = alg(aliveSiblings, wasAlive, state.lifeRules)
 
         if (isAlive !== wasAlive) {
           nextGenChanges[x][y] = isAlive

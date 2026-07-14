@@ -1,5 +1,10 @@
 <template>
     <div>
+        <select v-model="lifeRule" :disabled="playDisabled">
+          <option v-for="option in ruleKeys" :value="option" :key="option">
+            {{ option }}
+          </option>
+        </select>
         <button v-on:click="undo()" :disabled="backDisabled">Back</button>
         <button v-on:click="play()" :disabled="playDisabled">Start</button>
         <button v-on:click="step()" :disabled="stepDisabled">Step</button>
@@ -13,6 +18,7 @@
 import Vue from 'vue'
 import { CreateCellsPayload } from '@/store/modules/board'
 import { RootState } from '@/types'
+import { LifeLikeRules, defaultRule } from '@/life-like-rules'
 
 interface ButtonsData {
   interval: number | undefined,
@@ -20,7 +26,8 @@ interface ButtonsData {
   stepDisabled: boolean,
   stopDisabled: boolean,
   resetDisabled: boolean,
-  randomDisabled: boolean
+  randomDisabled: boolean,
+  lifeRule: string
 }
 
 export interface ButtonsComponent extends Vue {
@@ -36,12 +43,16 @@ export default Vue.extend({
       stepDisabled: true,
       stopDisabled: true,
       resetDisabled: true,
-      randomDisabled: true
+      randomDisabled: true,
+      lifeRule: defaultRule
     }
   },
   computed: {
     backDisabled (): boolean {
       return (this.$store.state as RootState).board.history.length === 0
+    },
+    ruleKeys () {
+      return Object.keys(LifeLikeRules)
     }
   },
   created () {
@@ -49,6 +60,7 @@ export default Vue.extend({
   },
   methods: {
     play (): void {
+      this.$store.commit('board/setLifeRules', this.lifeRule)
       this.interval = window.setInterval(() => this.$store.commit('board/tick'), 200)
       this.playDisabled = true
       this.stepDisabled = false

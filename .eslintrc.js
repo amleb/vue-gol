@@ -3,7 +3,7 @@
 module.exports = {
   root: true,
   parserOptions: {
-    parser: '@typescript-eslint/parser'
+    parser: 'typescript-eslint-parser'
   },
   env: {
     browser: true,
@@ -23,6 +23,8 @@ module.exports = {
   rules: {
     // allow async-await
     'generator-star-spacing': 'off',
+    // Type-only imports are reported as unused by the ESLint 4-era parser/rule stack.
+    'no-unused-vars': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
