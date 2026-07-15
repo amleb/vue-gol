@@ -9,11 +9,15 @@ function defineLifeRules<T extends Record<string, RuleDefinition>> (
 export const LifeLikeRules = defineLifeRules({
   'B3/S23': {
     name: "Conway's Game of Life",
-    description: 'Highly complex behavior.'
+    description: 'Original rule. Highly complex behavior.'
   },
   'B36/S23': {
     name: 'HighLife',
     description: 'Similar to Life but with a small self-replicating pattern.'
+  },
+  'B34/S34': {
+    name: '34 Life',
+    description: 'Was initially thought to be a stable alternative to Life, until computer simulation found that larger patterns tend to explode. Has many small oscillators and spaceships.'
   },
   'B1357/S1357': {
     name: 'Replicator',
@@ -26,6 +30,30 @@ export const LifeLikeRules = defineLifeRules({
   'B2/S': {
     name: 'Seeds',
     description: 'All patterns are phoenixes, meaning that every live cell immediately dies, and many patterns lead to explosive chaotic growth. However, some engineered patterns with complex behavior are known.'
+  },
+  'B35678/S5678': {
+    name: 'Diamoeba',
+    description: 'Forms large diamonds with chaotically fluctuating boundaries. First studied by Dean Hickerson, who in 1993 offered a $50 prize to find a pattern that fills space with live cells; the prize was won in 1999 by David Bell.'
+  },
+  'B36/S125': {
+    name: '2x2',
+    description: 'If a pattern is composed of 2x2 blocks, it will continue to evolve in the same form; grouping these blocks into larger powers of two leads to the same behavior, but slower. Has complex oscillators of high periods as well as a small glider.'
+  },
+  'B25/S4': {
+    name: '',
+    description: 'This rule supports a small self-replicating pattern which, when combined with a small glider pattern, causes the glider to bounce back and forth in a pseudorandom walk.'
+  },
+  'B3678/S34678': {
+    name: 'Day & Night',
+    description: 'Symmetric under on-off reversal. Has engineered patterns with highly complex behavior.'
+  },
+  'B368/S245': {
+    name: 'Morley',
+    description: 'Named after Stephen Morley; also called Move. Supports very high-period and slow spaceships.'
+  },
+  'B4678/S35678': {
+    name: 'Annaeal',
+    description: 'Also called the twisted majority rule. Symmetric under on-off reversal. Approximates the curve-shortening flow on the boundaries between live and dead cells.'
   }
 })
 
