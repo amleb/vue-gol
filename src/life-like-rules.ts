@@ -22,6 +22,10 @@ export const LifeLikeRules = defineLifeRules({
   'B3/S012345678': {
     name: 'Life without Death',
     description: 'Also known as Inkspot or Flakes. Cells that become alive never die. It combines chaotic growth with more structured ladder-like patterns that can be used to simulate arbitrary Boolean circuits.'
+  },
+  'B2/S': {
+    name: 'Seeds',
+    description: 'All patterns are phoenixes, meaning that every live cell immediately dies, and many patterns lead to explosive chaotic growth. However, some engineered patterns with complex behavior are known.'
   }
 })
 

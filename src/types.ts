@@ -17,9 +17,9 @@ type OnlyLifeDigits < S extends string > =
 export type LifeRule < S extends string > =
   S extends `B${infer Birth}/S${infer Survival}`
     ? Birth extends ''
-      ? never
+      ? OnlyLifeDigits<Survival> extends true ? S : never
       : Survival extends ''
-        ? never
+        ? OnlyLifeDigits<Birth> extends true ? S : never
         : OnlyLifeDigits<Birth> extends true
           ? OnlyLifeDigits<Survival> extends true
             ? S
